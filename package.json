@@ -1,0 +1,19 @@
+{
+  "name": "capcha",
+  "version": "1.0.0",
+  "description": "Captcha prank page with Vercel Web Analytics",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve prank",
+    "build": "echo 'Static HTML - no build needed'",
+    "lint": "echo 'No linter configured'"
+  },
+  "keywords": [
+    "captcha",
+    "prank"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
