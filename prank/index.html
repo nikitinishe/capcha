@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Подтверждение безопасности</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background: #f0f2f5;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .captcha-box {
+    background: #fff;
+    padding: 32px 28px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+  }
+
+  .captcha-header { margin-bottom: 24px; }
+
+  .logo { font-size: 40px; margin-bottom: 8px; }
+
+  .captcha-header h1 {
+    font-size: 20px;
+    color: #202124;
+    font-weight: 600;
+  }
+
+  .captcha-widget {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #d3d3d3;
+    border-radius: 4px;
+    padding: 12px 14px;
+    background: #f9f9f9;
+    margin-bottom: 16px;
+  }
+
+  .checkbox-wrap {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    gap: 12px;
+  }
+
+  .checkbox-wrap input { display: none; }
+
+  .custom-check {
+    width: 24px;
+    height: 24px;
+    border: 2px solid #5f6368;
+    border-radius: 2px;
+    background: #fff;
+    display: inline-block;
+    position: relative;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .checkbox-wrap input:checked + .custom-check {
+    background: #1a73e8;
+    border-color: #1a73e8;
+  }
+
+  .checkbox-wrap input:checked + .custom-check::after {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 2px;
+    width: 6px;
+    height: 12px;
+    border: solid #fff;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+  }
+
+  .label-text { font-size: 15px; color: #202124; }
+
+  .captcha-logo {
+    font-size: 11px;
+    color: #5f6368;
+    text-align: right;
+    line-height: 1.2;
+  }
+
+  .hint {
+    font-size: 13px;
+    color: #5f6368;
+    margin-top: 8px;
+  }
+
+  .loader {
+    width: 24px;
+    height: 24px;
+    border: 3px solid #e0e0e0;
+    border-top-color: #1a73e8;
+    border-radius: 50%;
+    margin: 16px auto 0;
+    display: none;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .loader.active { display: block; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+  <div class="captcha-box">
+    <div class="captcha-header">
+      <div class="logo">🔒</div>
+      <h1>Проверка безопасности</h1>
+    </div>
+
+    <div class="captcha-widget">
+      <label class="checkbox-wrap">
+        <input type="checkbox" id="captchaCheck">
+        <span class="custom-check"></span>
+        <span class="label-text">Я не робот</span>
+      </label>
+      <div class="captcha-logo">reCAPTCHA</div>
+    </div>
+
+    <p class="hint">Нажмите на галочку, чтобы продолжить</p>
+    <div class="loader" id="loader"></div>
+  </div>
+
+  <audio id="prankAudio" src="sound.mp3" preload="auto"></audio>
+
+<script>
+  const checkbox = document.getElementById('captchaCheck');
+  const loader = document.getElementById('loader');
+  const audio = document.getElementById('prankAudio');
+
+  audio.volume = 1.0;
+
+  let triggered = false;
+
+  checkbox.addEventListener('change', () => {
+    if (!checkbox.checked || triggered) return;
+    triggered = true;
+
+    loader.classList.add('active');
+
+    setTimeout(() => {
+      playSound();
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+    }, 700);
+  });
+
+  function playSound() {
+    audio.currentTime = 0;
+    const p = audio.play();
+    if (p !== undefined) {
+      p.catch(err => console.warn('Не удалось воспроизвести:', err));
+    }
+  }
+
+  window.addEventListener('beforeunload', (e) => {
+    if (!audio.paused) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+
+  window.addEventListener('pagehide', () => {
+    audio.pause();
+  });
+</script>
+
+</body>
+</html>
