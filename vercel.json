@@ -1,0 +1,7 @@
+{
+  "buildCommand": "echo 'Static HTML - no build needed'",
+  "outputDirectory": "prank",
+  "analytics": {
+    "enable": true
+  }
+}

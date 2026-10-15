@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+.vercel/
+
+# Misc
+.DS_Store
+*.log
+.env
+.env.local
+.env.production.local
+.env.development.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
